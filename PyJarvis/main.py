@@ -8,6 +8,9 @@ import webbrowser
 import os
 from openai import OpenAI
 
+OPENAI_API_KEY = os.environ["OPENAI_API_KEY"]
+OPENWEATHER_API_KEY = os.environ["OPENWEATHER_API_KEY"]
+
 r = sr.Recognizer()
 
 engine = pyttsx3.init()
@@ -81,7 +84,7 @@ def ejecutarComandos(comando):
 
 def chatGPT(mensaje):
     client = OpenAI(
-        api_key='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',
+        api_key=os.getenv('OPENAI_API_KEY'),
     )
     chat_completion = client.chat.completions.create(
         messages=[
@@ -96,8 +99,9 @@ def chatGPT(mensaje):
         model="gpt-3.5-turbo",
     )
     return chat_completion.choices[0].message.content
+
 def obtener_info_clima(ciudad):
-    api_key = '3e8c3b3d635dd2e6f55695980e512223'
+    api_key = os.getenv('OPENWEATHER_API_KEY')
     url = f'http://api.openweathermap.org/data/2.5/weather?q={ciudad}&appid={api_key}&lang=es'
     respuesta = requests.get(url)
     datos_clima = respuesta.json()
@@ -127,7 +131,6 @@ def abrir_aplicacion(nombre_aplicacion):
     else:
         return f'No conozco la aplicación {nombre_aplicacion}.'
 
-
 hablar('Di iniciar.')
 while True:
     comandoInicial = detectarComandos()
@@ -140,10 +143,7 @@ while True:
             ejecucion = ejecutarComandos(comando)
             if (ejecucion == False):
                 break
-            hablar('¿Puedo hacer algo mas por usted?')
-
-
-
+            hablar('¿Puedo hacer algo más por usted?')
 
 
 
